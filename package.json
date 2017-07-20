@@ -1,6 +1,6 @@
 {
   "version": "0.0.1",
-  "private": true,
+  "private": false,
   "name": "angular-screen-sensor",
   "description": "Get some elements from an element container. AngularJS",
   "main": "src/screen-sensor.min.js",
