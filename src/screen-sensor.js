@@ -27,7 +27,7 @@ angular.module('angularScreenSensor',[]);
 */
 angular.module('angularScreenSensor')
 .directive('screenSensor',
-function(sensorRemote){
+function(sensorRemote, $window){
   return {
     restrict: 'A',
     controller: function($scope, $element, $attrs){
@@ -105,15 +105,25 @@ function(sensorRemote){
           findAll();
         });
 
-        $( container ).resize(function(){
-            var newSize = $(this).width()+'x'+$(this).height();
+        angular.element($window).bind('resize',function(){
+            var newSize = $(container).width()+'x'+$(container).height();
             if(currentSize!==newSize){
-              console.log('newSize');
               currentSize = newSize;
+              findAll();
             }
         });
 
-        sensorRemote.register({event: 'scan', callback: findAll})
+        sensorRemote.register(
+          {
+            event: 'scan',
+            callback: function(id){
+              if(id){
+                if(!(id == $attrs.id)) return;
+              }
+              findAll();
+            }
+          }
+        );
     }
   };
 }
@@ -155,7 +165,7 @@ angular.module("angularScreenSensor")
 * @ngdoc factory
 * @name angularScreenSensor.sensorRemote
 * @description
-*  Interact with screenSensor
+*  Service to interact with screenSensor
 */
 angular.module("angularScreenSensor")
 .factory("sensorRemote", function($timeout){
@@ -163,11 +173,11 @@ angular.module("angularScreenSensor")
   var screenSensorsListeners = [];
   const GLOBAL_EVENT = 'all';
 
-  function scan(){
+  function scan(id){
     screenSensorsListeners.forEach(
       function(listener){
         if(listener.event == 'scan' || listener.event == GLOBAL_EVENT){
-          listener.callback();
+          listener.callback(id);
         }
       }
     );

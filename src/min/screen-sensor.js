@@ -27,7 +27,7 @@ angular.module('angularScreenSensor',[]);
 */
 angular.module('angularScreenSensor')
 .directive('screenSensor',
-['sensorRemote', function(sensorRemote){
+['sensorRemote', '$window', function(sensorRemote, $window){
   return {
     restrict: 'A',
     controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs){
@@ -105,11 +105,11 @@ angular.module('angularScreenSensor')
           findAll();
         });
 
-        $( container ).resize(function(){
-            var newSize = $(this).width()+'x'+$(this).height();
+        angular.element($window).bind('resize',function(){
+            var newSize = $(container).width()+'x'+$(container).height();
             if(currentSize!==newSize){
-              console.log('newSize');
               currentSize = newSize;
+              findAll();
             }
         });
 
