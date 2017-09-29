@@ -173,6 +173,12 @@ angular.module("angularScreenSensor")
   var screenSensorsListeners = [];
   const GLOBAL_EVENT = 'all';
 
+  /**
+  * @memberof angularScreenSensor.sensorRemote
+  * @function scan
+  * @description Trigger a scan by a screen sensor
+  * @param {string} id - id of the screen sensor to react. If not mentioned, all of them will react.
+  */
   function scan(id){
     screenSensorsListeners.forEach(
       function(listener){
@@ -183,6 +189,12 @@ angular.module("angularScreenSensor")
     );
   }
 
+  /**
+  * @memberof angularScreenSensor.sensorRemote
+  * @function register
+  * @description Register an event handler
+  * @param {object|callback} fn - {event: ..., callback: ...} or a function (= same as object with event='all')
+  */
   function register(fn){
     if(!fn)
       return;
